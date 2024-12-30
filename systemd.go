@@ -123,7 +123,7 @@ func (driver *systemdDriver) Install(override bool) (bool, error) {
 		return false, err
 	}
 
-	err = exec.Command("sudo", "systemctl", "daemon-reload", driver.name).Run()
+	err = exec.Command("sudo", "systemctl", "daemon-reload").Run()
 	if err != nil {
 		return false, err
 	}
