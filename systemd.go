@@ -54,7 +54,7 @@ type SystemdService interface {
 	// Exists checks if the service exists.
 	Exists() bool
 	// Enabled checks if the service exists and enabled on startup.
-	Enabled() (bool, error)
+	Enabled() bool
 	// Install installs the service.
 	// override parameter indicating whether to override existing configurations.
 	// returns false if service exists and not override.
@@ -99,12 +99,9 @@ func (driver *systemdDriver) Exists() bool {
 	return err == nil
 }
 
-func (driver *systemdDriver) Enabled() (bool, error) {
-	if output, err := exec.Command("sudo", "systemctl", "is-enabled", driver.name).Output(); err != nil {
-		return false, err
-	} else {
-		return strings.HasPrefix(string(output), "enabled"), nil
-	}
+func (driver *systemdDriver) Enabled() bool {
+	output, _ := exec.Command("sudo", "systemctl", "is-enabled", driver.name).Output()
+	return strings.HasPrefix(string(output), "enabled")
 }
 
 func (driver *systemdDriver) Install(override bool) (bool, error) {
