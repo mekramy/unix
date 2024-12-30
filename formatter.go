@@ -25,60 +25,79 @@ const (
 )
 
 // Printf applies ANSI escape codes to a given pattern string and prints the formatted string with the provided arguments.
-// The pattern string can contain placeholders for various styles and colors, which will be replaced by the corresponding ANSI codes.
+// The pattern string can contain tags followed by content token for various styles and colors, which will be replaced by the corresponding ANSI codes.
+// You can scape token with \@
 //
 // Supported styling patterns:
-// {R}, @/: RESET
-// {B}, @B: BOLD
-// {U}, @U: UNDERLINE
-// {S}, @S: STRIKE
-// {I}, @I: ITALIC
+// B: BOLD
+// U: UNDERLINE
+// S: STRIKE
+// I: ITALIC
 //
 // Supported color patterns:
-// {r}, @r: RED
-// {g}, @g: GREEN
-// {y}, @y: YELLOW
-// {b}, @b: BLUE
-// {p}, @p: PURPLE
-// {c}, @c: CYAN
-// {m}, @m: GRAY
-// {w}, @w: WHITE
+// r: RED
+// g: GREEN
+// y: YELLOW
+// b: BLUE
+// p: PURPLE
+// c: CYAN
+// m: GRAY
+// w: WHITE
 //
 // Example usage:
-// Formatter("{B}Bold Text{R} and {r}Red Text{R}\n")
-// Formatter("{g}Green Text{R} with arguments: %d, %s\n", 42, "example")
+// PrintF("@Bg{Bold Green Text} and @r{Red %s}\n", "message")
 //
 // Arguments:
-// - pattern: The string containing the text and placeholders for styling and colors.
-// - args: The arguments to be formatted into the pattern string.
-func PrintF(pattern string, args ...any) {
+// - format: The string containing the standard go fmt format with styled tokens.
+// - args: The arguments to be passed into the format string.
+func PrintF(format string, args ...any) {
+	var started bool
+	var inside bool
+	var result strings.Builder
+	var token strings.Builder
+	var content strings.Builder
 	replacer := strings.NewReplacer(
-		"{R}", RESET,
-		"@/", RESET,
-		"{B}", BOLD,
-		"@B", BOLD,
-		"{U}", UNDERLINE,
-		"@U", UNDERLINE,
-		"{S}", STRIKE,
-		"@S", STRIKE,
-		"{I}", ITALIC,
-		"@I", ITALIC,
-		"{r}", RED,
-		"@r", RED,
-		"{g}", GREEN,
-		"@g", GREEN,
-		"{y}", YELLOW,
-		"@y", YELLOW,
-		"{b}", BLUE,
-		"@b", BLUE,
-		"{p}", PURPLE,
-		"@p", PURPLE,
-		"{c}", CYAN,
-		"@c", CYAN,
-		"{m}", GRAY,
-		"@m", GRAY,
-		"{w}", WHITE,
-		"@w", WHITE,
+		// styles
+		"B", BOLD,
+		"U", UNDERLINE,
+		"S", STRIKE,
+		"I", ITALIC,
+		// colors
+		"r", RED,
+		"g", GREEN,
+		"y", YELLOW,
+		"b", BLUE,
+		"p", PURPLE,
+		"c", CYAN,
+		"m", GRAY,
+		"w", WHITE,
 	)
-	fmt.Printf(replacer.Replace(pattern), args...)
+
+	for i := 0; i < len(format); i++ {
+		if format[i] == '@' && (i == 0 || format[i-1] != '\\') {
+			started = true
+			token.Reset()
+			content.Reset()
+		} else if started && !inside {
+			if format[i] == '{' && (i == 0 || format[i-1] != '\\') {
+				inside = true
+				content.Reset()
+			} else {
+				token.WriteByte(format[i])
+			}
+		} else if started && inside {
+			if format[i] == '}' && (i == 0 || format[i-1] != '\\') {
+				started = false
+				inside = false
+				result.WriteString(replacer.Replace(token.String()))
+				result.WriteString(content.String())
+				result.WriteString(RESET)
+			} else {
+				content.WriteByte(format[i])
+			}
+		} else {
+			result.WriteByte(format[i])
+		}
+	}
+	fmt.Printf(strings.NewReplacer("\\@", "@").Replace(result.String()), args...)
 }

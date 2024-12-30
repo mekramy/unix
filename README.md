@@ -101,38 +101,44 @@ Creates a new cron job.
 - `Install() (bool, error)`: Installs the cron job.
 - `Uninstall() (bool, error)`: Uninstalls the cron job.
 
-## Formatter Functions
+## Formatter Utility
 
 ### PrintF
 
 ```go
-func PrintF(pattern string, args ...any)
+func PrintF(format string, args ...any)
 ```
 
-Prints a formatted string according to the specified pattern. The pattern can include styling placeholders that will be replaced with corresponding ANSI escape codes.
+The `PrintF` print stylized text to console. The pattern string can contain tags followed by content tokens for various styles and colors. You can escape tokens with `\@`.
 
-#### Styling Patterns
+#### Supported Styling Patterns
 
-- `{R}`, `@/`: RESET
-- `{B}`, `@B`: BOLD
-- `{U}`, `@U`: UNDERLINE
-- `{S}`, `@S`: STRIKE
-- `{I}`, `@I`: ITALIC
-- `{r}`, `@r`: RED
-- `{g}`, `@g`: GREEN
-- `{y}`, `@y`: YELLOW
-- `{b}`, `@b`: BLUE
-- `{p}`, `@p`: PURPLE
-- `{c}`, `@c`: CYAN
-- `{m}`, `@m`: GRAY
-- `{w}`, `@w`: WHITE
+- `B`: BOLD
+- `U`: UNDERLINE
+- `S`: STRIKE
+- `I`: ITALIC
+
+#### Supported Color Patterns
+
+- `r`: RED
+- `g`: GREEN
+- `y`: YELLOW
+- `b`: BLUE
+- `p`: PURPLE
+- `c`: CYAN
+- `m`: GRAY
+- `w`: WHITE
 
 #### Example Usage
 
 ```go
-Formatter("{B}Bold Text{R} and {r}Red Text{R}\n")
-Formatter("@gGreen Text@/ with arguments: @B%d@/, @m%s@/\n", 42, "example")
+PrintF("@Bg{Bold Green Text} and @r{Red %s}\n", "message")
 ```
+
+#### Arguments
+
+- `format`: The string containing the standard Go `fmt` format with styled tokens.
+- `args`: The arguments to be passed into the format string.
 
 ## License
 
