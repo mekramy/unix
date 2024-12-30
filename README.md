@@ -113,7 +113,7 @@ Prints a formatted string according to the specified pattern. The pattern can in
 
 #### Styling Patterns
 
-- `{R}`, `@`: RESET
+- `{R}`, `@/`: RESET
 - `{B}`, `@B`: BOLD
 - `{U}`, `@U`: UNDERLINE
 - `{S}`, `@S`: STRIKE
@@ -131,7 +131,7 @@ Prints a formatted string according to the specified pattern. The pattern can in
 
 ```go
 Formatter("{B}Bold Text{R} and {r}Red Text{R}\n")
-Formatter("{g}Green Text{R} with arguments: %d, %s\n", 42, "example")
+Formatter("@gGreen Text@/ with arguments: @B%d@/, @m%s@/\n", 42, "example")
 ```
 
 ## License

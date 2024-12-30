@@ -28,7 +28,7 @@ const (
 // The pattern string can contain placeholders for various styles and colors, which will be replaced by the corresponding ANSI codes.
 //
 // Supported styling patterns:
-// {R}, @: RESET
+// {R}, @/: RESET
 // {B}, @B: BOLD
 // {U}, @U: UNDERLINE
 // {S}, @S: STRIKE
@@ -54,7 +54,7 @@ const (
 func PrintF(pattern string, args ...any) {
 	replacer := strings.NewReplacer(
 		"{R}", RESET,
-		"@", RESET,
+		"@/", RESET,
 		"{B}", BOLD,
 		"@B", BOLD,
 		"{U}", UNDERLINE,
