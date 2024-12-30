@@ -112,7 +112,7 @@ func (cron *cronDriver) Compile() string {
 }
 
 func (cron *cronDriver) Exists() (bool, error) {
-	if out, err := exec.Command("sudo", "crontab", "-l").Output(); err != nil {
+	if out, err := execVE(exec.Command("sudo", "crontab", "-l").Output()); err != nil {
 		return false, err
 	} else {
 		return strings.Contains(string(out), cron.Compile()), nil
@@ -126,7 +126,7 @@ func (cron *cronDriver) Install() (bool, error) {
 		return false, nil
 	} else {
 		cmd := `(crontab -l ; echo "` + cron.Compile() + `") | crontab -`
-		return true, exec.Command("sudo", "bash", "-c", cmd).Run()
+		return true, execE(exec.Command("sudo", "bash", "-c", cmd).Run())
 	}
 }
 
@@ -136,7 +136,7 @@ func (cron *cronDriver) Uninstall() (bool, error) {
 	} else if !exists {
 		return false, nil
 	} else {
-		if out, err := exec.Command("sudo", "crontab", "-l").Output(); err != nil {
+		if out, err := execVE(exec.Command("sudo", "crontab", "-l").Output()); err != nil {
 			return false, err
 		} else {
 			lines := strings.Split(string(out), "\n")
@@ -147,7 +147,7 @@ func (cron *cronDriver) Uninstall() (bool, error) {
 				}
 			}
 			cmd := `echo "` + newCron + `" | crontab -`
-			return true, exec.Command("sudo", "bash", "-c", cmd).Run()
+			return true, execE(exec.Command("sudo", "bash", "-c", cmd).Run())
 		}
 	}
 }
