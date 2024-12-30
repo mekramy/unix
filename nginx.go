@@ -108,7 +108,7 @@ func (server *serverBlock) Disable() error {
 	}
 
 	// Reload nginx to apply the changes
-	return exec.Command("systemctl", "restart", "nginx").Run()
+	return exec.Command("sudo", "systemctl", "restart", "nginx").Run()
 }
 
 func (server *serverBlock) Enable() error {
@@ -122,7 +122,7 @@ func (server *serverBlock) Enable() error {
 	}
 
 	// Reload nginx to apply the changes
-	return exec.Command("systemctl", "restart", "nginx").Run()
+	return exec.Command("sudo", "systemctl", "restart", "nginx").Run()
 }
 
 func (server *serverBlock) Exists() (bool, error) {
@@ -159,7 +159,7 @@ func (server *serverBlock) Install(override bool) (bool, error) {
 		return false, err
 	}
 
-	if err := exec.Command("systemctl", "restart", "nginx").Run(); err != nil {
+	if err := exec.Command("sudo", "systemctl", "restart", "nginx").Run(); err != nil {
 		return false, err
 	} else {
 		return true, nil
@@ -178,5 +178,5 @@ func (server *serverBlock) Uninstall() error {
 	}
 
 	// Reload nginx to apply the changes
-	return exec.Command("systemctl", "restart", "nginx").Run()
+	return exec.Command("sudo", "systemctl", "restart", "nginx").Run()
 }

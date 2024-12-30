@@ -95,12 +95,12 @@ func (driver *systemdDriver) Template(engine TemplateEngine) SystemdService {
 }
 
 func (driver *systemdDriver) Exists() bool {
-	_, err := exec.Command("systemctl", "status", driver.name).Output()
+	_, err := exec.Command("sudo", "systemctl", "status", driver.name).Output()
 	return err == nil
 }
 
 func (driver *systemdDriver) Enabled() (bool, error) {
-	if output, err := exec.Command("systemctl", "is-enabled", driver.name).Output(); err != nil {
+	if output, err := exec.Command("sudo", "systemctl", "is-enabled", driver.name).Output(); err != nil {
 		return false, err
 	} else {
 		return strings.HasPrefix(string(output), "enabled"), nil
@@ -123,17 +123,17 @@ func (driver *systemdDriver) Install(override bool) (bool, error) {
 		return false, err
 	}
 
-	err = exec.Command("systemctl", "daemon-reload", driver.name).Run()
+	err = exec.Command("sudo", "systemctl", "daemon-reload", driver.name).Run()
 	if err != nil {
 		return false, err
 	}
 
-	err = exec.Command("systemctl", "enable", driver.name).Run()
+	err = exec.Command("sudo", "systemctl", "enable", driver.name).Run()
 	if err != nil {
 		return false, err
 	}
 
-	err = exec.Command("systemctl", "start", driver.name).Run()
+	err = exec.Command("sudo", "systemctl", "start", driver.name).Run()
 	if err != nil {
 		return false, err
 	}
@@ -142,24 +142,17 @@ func (driver *systemdDriver) Install(override bool) (bool, error) {
 }
 
 func (driver *systemdDriver) Uninstall() error {
-	if !driver.Exists() {
-		return nil
+	if driver.Exists() {
+		err := exec.Command("systemctl", "stop", driver.name).Run()
+		if err != nil {
+			return err
+		}
+
+		err = exec.Command("systemctl", "disable", driver.name).Run()
+		if err != nil {
+			return err
+		}
 	}
 
-	err := exec.Command("systemctl", "stop", driver.name).Run()
-	if err != nil {
-		return err
-	}
-
-	err = exec.Command("systemctl", "disable", driver.name).Run()
-	if err != nil {
-		return err
-	}
-
-	err = os.Remove(driver.path())
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return os.Remove(driver.path())
 }
