@@ -142,7 +142,7 @@ func (cron *cronDriver) Uninstall() (bool, error) {
 			lines := strings.Split(string(out), "\n")
 			newCron := ""
 			for _, line := range lines {
-				if !strings.Contains(line, cron.Compile()) {
+				if line != "" && !strings.Contains(line, cron.Compile()) {
 					newCron += line + "\n"
 				}
 			}
