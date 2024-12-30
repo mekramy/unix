@@ -101,48 +101,39 @@ Creates a new cron job.
 - `Install() (bool, error)`: Installs the cron job.
 - `Uninstall() (bool, error)`: Uninstalls the cron job.
 
-## License
-
-This project is licensed under the MIT License.
-
 ## Formatter Functions
 
-### Formatter
+### PrintF
 
 ```go
-func Formatter(pattern string, args ...any)
+func PrintF(pattern string, args ...any)
 ```
 
-Formats and prints a string according to the specified pattern. The pattern can include styling placeholders that will be replaced with corresponding ANSI escape codes.
+Prints a formatted string according to the specified pattern. The pattern can include styling placeholders that will be replaced with corresponding ANSI escape codes.
 
 #### Styling Patterns
 
-- `{R}`: RESET
-- `{B}`: BOLD
-- `{U}`: UNDERLINE
-- `{S}`: STRIKE
-- `{I}`: ITALIC
-- `{r}`: RED
-- `{g}`: GREEN
-- `{y}`: YELLOW
-- `{b}`: BLUE
-- `{p}`: PURPLE
-- `{c}`: CYAN
-- `{m}`: GRAY
-- `{w}`: WHITE
+- `{R}`, `@`: RESET
+- `{B}`, `@B`: BOLD
+- `{U}`, `@U`: UNDERLINE
+- `{S}`, `@S`: STRIKE
+- `{I}`, `@I`: ITALIC
+- `{r}`, `@r`: RED
+- `{g}`, `@g`: GREEN
+- `{y}`, `@y`: YELLOW
+- `{b}`, `@b`: BLUE
+- `{p}`, `@p`: PURPLE
+- `{c}`, `@c`: CYAN
+- `{m}`, `@m`: GRAY
+- `{w}`, `@w`: WHITE
 
-### PrintError
-
-```go
-func PrintError(title, message string)
-```
-
-Prints an error message with the title in bold and the message in red.
-
-### PrintSuccess
+#### Example Usage
 
 ```go
-func PrintSuccess(title, message string)
+Formatter("{B}Bold Text{R} and {r}Red Text{R}\n")
+Formatter("{g}Green Text{R} with arguments: %d, %s\n", 42, "example")
 ```
 
-Prints a success message with the title in bold and the message in green.
+## License
+
+This project is licensed under the MIT License.
