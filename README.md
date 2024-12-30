@@ -104,3 +104,45 @@ Creates a new cron job.
 ## License
 
 This project is licensed under the MIT License.
+
+## Formatter Functions
+
+### Formatter
+
+```go
+func Formatter(pattern string, args ...any)
+```
+
+Formats and prints a string according to the specified pattern. The pattern can include styling placeholders that will be replaced with corresponding ANSI escape codes.
+
+#### Styling Patterns
+
+- `{R}`: RESET
+- `{B}`: BOLD
+- `{U}`: UNDERLINE
+- `{S}`: STRIKE
+- `{I}`: ITALIC
+- `{r}`: RED
+- `{g}`: GREEN
+- `{y}`: YELLOW
+- `{b}`: BLUE
+- `{p}`: PURPLE
+- `{c}`: CYAN
+- `{m}`: GRAY
+- `{w}`: WHITE
+
+### PrintError
+
+```go
+func PrintError(title, message string)
+```
+
+Prints an error message with the title in bold and the message in red.
+
+### PrintSuccess
+
+```go
+func PrintSuccess(title, message string)
+```
+
+Prints a success message with the title in bold and the message in green.
