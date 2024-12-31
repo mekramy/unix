@@ -107,7 +107,7 @@ func (cron *cronDriver) Compile() string {
 	if cron.timezone == "" {
 		return cron.interval + " " + cron.command
 	} else {
-		return cron.interval + " " + cron.command + " TZ=" + cron.timezone
+		return "TZ=" + cron.timezone + " " + cron.interval + " " + cron.command
 	}
 }
 
