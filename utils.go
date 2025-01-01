@@ -33,6 +33,19 @@ func crons() ([]string, error) {
 
 // cronCommand extracts the command from a cron expression.
 func cronCommand(cronExpr string) (bool, string) {
+	// Handle predefined constants
+	aliases := []string{
+		"@reboot ", "@yearly ", "@annually ",
+		"@monthly ", "@weekly ", "@daily ",
+		"@midnight ", "@hourly ",
+	}
+	for _, alias := range aliases {
+		if strings.HasPrefix(cronExpr, alias) {
+			return true, strings.TrimPrefix(cronExpr, alias)
+		}
+	}
+
+	// Handle custom cron expressions
 	parts := strings.Fields(cronExpr)
 	if len(parts) < 6 {
 		return false, ""
