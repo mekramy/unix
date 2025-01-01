@@ -22,6 +22,11 @@ const (
 func NewCronJob(command string) CronJob {
 	cron := new(cronDriver)
 	cron.command = command
+	cron.minute = "*"
+	cron.hour = "*"
+	cron.day = "*"
+	cron.month = "*"
+	cron.weekday = "*"
 	return cron
 }
 
