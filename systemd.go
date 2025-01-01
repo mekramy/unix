@@ -119,15 +119,15 @@ func (driver *systemdDriver) Install(override bool) (bool, error) {
 		return false, err
 	}
 
-	if err := execE(exec.Command("sudo", "systemctl", "daemon-reload").Run()); err != nil {
+	if err := eOf(exec.Command("sudo", "systemctl", "daemon-reload").Run()); err != nil {
 		return false, err
 	}
 
-	if err := execE(exec.Command("sudo", "systemctl", "enable", driver.name).Run()); err != nil {
+	if err := eOf(exec.Command("sudo", "systemctl", "enable", driver.name).Run()); err != nil {
 		return false, err
 	}
 
-	if err := execE(exec.Command("sudo", "systemctl", "start", driver.name).Run()); err != nil {
+	if err := eOf(exec.Command("sudo", "systemctl", "start", driver.name).Run()); err != nil {
 		return false, err
 	}
 
@@ -136,11 +136,11 @@ func (driver *systemdDriver) Install(override bool) (bool, error) {
 
 func (driver *systemdDriver) Uninstall() error {
 	if driver.Exists() {
-		if err := execE(exec.Command("systemctl", "stop", driver.name).Run()); err != nil {
+		if err := eOf(exec.Command("systemctl", "stop", driver.name).Run()); err != nil {
 			return err
 		}
 
-		if err := execE(exec.Command("systemctl", "disable", driver.name).Run()); err != nil {
+		if err := eOf(exec.Command("systemctl", "disable", driver.name).Run()); err != nil {
 			return err
 		}
 	}
