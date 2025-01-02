@@ -134,8 +134,8 @@ func (cron *cronDriver) intervalInTz() string {
 		duration := time.Duration(-cron.tzHour)*time.Hour +
 			time.Duration(-cron.tzMinute)*time.Minute
 		timeInTz := t.Add(duration)
-		return timeInTz.Format("15 ") +
-			timeInTz.Format("4 ") +
+		return timeInTz.Format("4 ") +
+			timeInTz.Format("15 ") +
 			cron.day + " " +
 			cron.month + " " +
 			cron.weekday
