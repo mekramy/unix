@@ -230,7 +230,7 @@ func (cron cronDriver) Compile() string {
 	if cron.reboot {
 		return "@reboot " + cron.command
 	} else {
-		return cron.intervalInTz()
+		return cron.intervalInTz() + " " + cron.command
 	}
 }
 
@@ -270,7 +270,7 @@ func (cron *cronDriver) Install() (bool, error) {
 			return false, err
 		}
 
-		return true, eOf(exec.Command("systemctl", "restart", "cron").Run())
+		return true, eOf(exec.Command("sudo", "systemctl", "restart", "cron").Run())
 	}
 }
 
@@ -292,6 +292,6 @@ func (cron *cronDriver) Uninstall() error {
 			return err
 		}
 
-		return eOf(exec.Command("systemctl", "restart", "cron").Run())
+		return eOf(exec.Command("sudo", "systemctl", "restart", "cron").Run())
 	}
 }
