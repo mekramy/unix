@@ -6,6 +6,16 @@ import (
 	"github.com/mekramy/unix"
 )
 
+func TestCronJob(t *testing.T) {
+	job := unix.NewCronJob("do some").
+		Weekly(unix.Friday).
+		SetTz(3, 30)
+
+	if job.Compile() != "20 -3 * * 5" {
+		t.Fatal("FAIL", job.Compile())
+	}
+}
+
 func TestPrintF(t *testing.T) {
 	tests := []struct {
 		format string

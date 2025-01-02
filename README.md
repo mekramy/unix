@@ -30,6 +30,14 @@ func FileExists(filePath string) (bool, error)
 
 Checks if a file exists and returns an error if it does not.
 
+### QuickReplace
+
+```go
+func QuickReplace(content string, replacements ...string) string
+```
+
+replaces all {instances} of the search string with the replacement string.
+
 ## Systemd Service Management
 
 ### NewSystemdService
@@ -86,20 +94,24 @@ Creates a new cron job.
 
 ### CronJob Interface
 
-- `Command(command string) CronJob`: Sets the command to be executed by the cron job.
-- `UTCTz() CronJob`: Sets the timezone of the cron job to UTC.
-- `TehranTz() CronJob`: Sets the timezone of the cron job to Asia/Tehran.
-- `Timezone(tz string) CronJob`: Sets the timezone of the cron job to the specified timezone.
-- `Hourly() CronJob`: Schedules the cron job to run every hour.
-- `Daily() CronJob`: Schedules the cron job to run every day.
-- `Weekly() CronJob`: Schedules the cron job to run every week.
-- `Monthly() CronJob`: Schedules the cron job to run every month.
-- `EveryXHours(hours int) CronJob`: Schedules the cron job to run every specified number of hours.
-- `EveryXMinutes(minutes int) CronJob`: Schedules the cron job to run every specified number of minutes.
-- `Compile() string`: Compiles the cron job into a cron expression string.
-- `Exists() (bool, error)`: Checks if the cron job already exists.
-- `Install() (bool, error)`: Installs the cron job.
-- `Uninstall() (bool, error)`: Uninstalls the cron job.
+- `SetTz(hour int, min int) CronJob`: sets the timezone of the cron job.
+- `AtReboot() CronJob`: schedules the cron job to run at reboot.
+- `Yearly() CronJob`: schedules the cron job to run every year.
+- `Monthly() CronJob`: schedules the cron job to run every month.
+- `Weekly(wd Weekday) CronJob`: schedules the cron job to run every week.
+- `Daily() CronJob`: schedules the cron job to run every day.
+- `EveryXHours(hours int) CronJob`: schedules the cron job to run every specified number of hours.
+- `EveryXMinutes(minutes int) CronJob`: schedules the cron job to run every specified number of minutes.
+- `SetMinute(minute int) CronJob`: sets the minute of the cron job.
+- `SetHour(hour int) CronJob`: sets the hour of the cron job.
+- `SetDayOfMonth(day int) CronJob`: sets the day of the month of the cron job.
+- `SetMonth(month int) CronJob`: sets the month of the cron job.
+- `SetDayOfWeek(day Weekday) CronJob`: sets the day of the week of the cron job.
+- `Command(command string) CronJob`: sets the command to be executed by the cron job.
+- `Compile() string`: compiles the cron job into a cron expression string.
+- `Exists() (bool, error)`: checks if the cron job already exists.
+- `Install() (bool, error)`: installs the cron job. returns false if cronjob exists.
+- `Uninstall() error`: uninstalls the cron job.
 
 ## Formatter Utility
 
